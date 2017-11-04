@@ -1,0 +1,29 @@
+clear
+clc
+%c = xlsread('hogtest.xlsx');
+c=csvread('leaftrait_fd.csv');                %%?入待?一化文件。。scale。txt是 work文件?下的待?一化文件 
+[m,n]=size(c);                     %%?取行?m 和 列?  n
+lower=-1;
+upper=1;                           %%?置?一化范? [lower ,upper]
+Cmax=zeros(1,n);                         
+Cmin=zeros(1,n);                         
+for i=2:n
+     Cmax(1,i)=max(c(:,i));                 %%Cmax用?保存每一列中的最大值
+end
+for i=2:n
+    Cmin(1,i)=min(c(:,i));                  %%Cmin用?保存每一列中的最小值
+end
+for i=1:m
+    for j=2:n
+        c(i,j)=lower+(upper-lower)*(   c(i,j)-Cmin(1,j)   )/(Cmax(1,j)-Cmin(1,j));  %%?行前述的公式?行?一化
+    end
+end
+%csvwrite('leaftrait_HOG_orange_normalize.csv', c);
+
+% 寫成libsvm的資料格式
+%SPECTF = csvread('text2.csv'); % read a csv file
+SPECTF = c;
+labels = SPECTF(:, 1); % labels from the 1st column
+features = SPECTF(:, 2:end); 
+features_sparse = sparse(features); % features must be in a sparse matrix
+libsvmwrite('leaftrait_fd.csv', labels, features_sparse);
