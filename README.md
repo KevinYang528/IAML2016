@@ -1,2 +1,2 @@
-# IAML2017
+# IAML2016
 Introductory Applied Machine Learning
